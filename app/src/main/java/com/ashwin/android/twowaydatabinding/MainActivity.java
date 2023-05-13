@@ -1,42 +1,27 @@
 package com.ashwin.android.twowaydatabinding;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
-import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.ashwin.android.twowaydatabinding.databinding.ActivityMainBinding;
+import com.ashwin.android.twowaydatabinding.model.ModelActivity;
+import com.ashwin.android.twowaydatabinding.mvvm.RegisterActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private ObservableModel observableModel;
-
-    public class ObservableModel extends BaseObservable {
-        private String name;
-
-        public ObservableModel() {
-            this.name = "";
-        }
-
-        @Bindable({"name"})
-        public String getName() {
-            return this.name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-            notifyPropertyChanged(BR.name);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.mvvmButton.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+        });
 
-        observableModel = new ObservableModel();
-        binding.setModel(observableModel);
+        binding.modelButton.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, ModelActivity.class));
+        });
     }
 }
